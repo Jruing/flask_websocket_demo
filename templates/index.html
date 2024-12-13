@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask-SocketIO Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Flask-SocketIO Chat</h1>
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button id="sendButton">Send</button>
+    <div id="messages"></div>
+
+    <script>
+        const socket = io("ws://127.0.0.1:5000"); // 默认连接到当前主机和端口
+
+        document.getElementById('sendButton').onclick = function() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            socket.emit('send_message', message);
+            messageInput.value = '';
+        };
+
+        socket.on('receive_message', function(message) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += `<p>${message}</p>`;
+        });
+    </script>
+</body>
+</html>
